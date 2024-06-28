@@ -1,26 +1,13 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { highlight } from '$lib/syntax-highlighter';
-	import { parseComponent } from '$lib/component-parser';
 
 	export let data: { code: string; usageExample: string };
 
 	let showCode = false;
-	let DynamicComponent: any;
 	let error: string | null = null;
-	let componentInfo: string = '';
 
 	$: toggleCode = () => (showCode = !showCode);
-
-	onMount(() => {
-		const { component, error: parseError } = parseComponent(data.code);
-		if (parseError) {
-			error = parseError;
-		} else {
-			DynamicComponent = component;
-			componentInfo = `Type: ${typeof component}, Keys: ${Object.keys(component).join(', ')}`;
-		}
-	});
 </script>
 
 <div class="max-w-2xl mx-auto p-6">
@@ -29,14 +16,8 @@
 	<div class="border border-gray-300 p-6 mb-6 rounded-lg">
 		{#if error}
 			<p class="text-red-500">Error: {error}</p>
-			<p class="mt-2">
-				Please ensure your component code includes a default export or named export.
-			</p>
-		{:else if DynamicComponent}
-			<svelte:component this={DynamicComponent} label="Click me!" />
-			<p class="mt-4 text-sm text-gray-600">Component Info: {componentInfo}</p>
 		{:else}
-			<p>Loading component...</p>
+			{@html data.usageExample}
 		{/if}
 	</div>
 

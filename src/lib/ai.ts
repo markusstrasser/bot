@@ -6,8 +6,8 @@ const yourAIUtility = async (prompt: string, schema: any) => {
     props: [{ name: 'label', type: 'string' }],
     events: ['click'],
     markup: '<button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" on:click>{label}</button>',
-    usageExample: '<Button label="Click me!" />'
-  };
+// In the yourAIUtility function:
+usageExample: '<button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Click me!</button>'  };
 };
 
 const componentSchema = {
