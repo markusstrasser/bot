@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
 	import { highlight } from '$lib/syntax-highlighter';
+	import { logError } from '$lib/logger';
 
 	export let data: { code: string; usageExample: string };
 
@@ -8,6 +8,16 @@
 	let error: string | null = null;
 
 	$: toggleCode = () => (showCode = !showCode);
+
+	try {
+		// Validate data
+		if (!data.code || !data.usageExample) {
+			throw new Error('Invalid component data');
+		}
+	} catch (e) {
+		error = e instanceof Error ? e.message : String(e);
+		logError(e as Error, { page: 'preview', action: 'load component' });
+	}
 </script>
 
 <div class="max-w-2xl mx-auto p-6">
