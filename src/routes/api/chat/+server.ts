@@ -8,6 +8,7 @@ const openai = createOpenAI({
 	apiKey: env.OPENAI_API_KEY ?? ''
 });
 
+
 export const POST = async ({ request }) => {
 	const { messages } = await request.json();
 
@@ -28,4 +29,5 @@ export const POST = async ({ request }) => {
 
 	return result.toAIStreamResponse();
 };
+
 

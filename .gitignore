@@ -8,6 +8,8 @@ node_modules
 src/ai
 tests/ai
 
+/.legacy
+.legacy
 out.txt
 
 # OS

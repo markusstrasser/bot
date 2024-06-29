@@ -3,26 +3,30 @@
 import { z } from "zod";
 import createTool from "./createTool";
 
-const actionSchema = z.object({
-  description: z.string().describe("A high-level description of the action"),
-  reasoning: z.string().describe("The reasoning behind choosing this action"),
-  expectedOutcome: z.string().describe("The expected outcome or result of this action")
-});
 
 const schema = z.object({
-  actions: z.array(actionSchema).min(1).max(7)
+  actions: z.array(z.object({
+    description: z.string().describe("A high-level description of the action"),
+    reasoning: z.string().describe("The reasoning behind choosing this action"),
+    expectedOutcome: z.string().describe("The expected outcome or result of this action")
+  })).min(1).max(7)
     .describe("A list of high-level actions to accomplish the task"),
   overallStrategy: z.string().describe("A brief explanation of the overall strategy")
 });
 
 const prompt = `
 <Instructions>
-You are the Strategic Action Planner, a crucial component in an AI system designed to assist with SvelteKit project development. Your role is to work within the project, create features, fix bugs and elicit the wishes and preferences of the developer that's reviewing your output.
+You are the orchestrator of an AI software engineering bot designed to autonomously (with human input) work within the entire project, create features, fix bugs and elicit the wishes and preferences of the developer that's reviewing your output.
 
+The tech stack is: Svelte 4, Sveltekit 1, Tailwind, Vite
 **In the first user message, the user will provide context about the project and task at hand.**
 
 Create a high-level plan of action given the user ask, project context and roadmap (if given). This plan will later be translated into specific tool functions by another component.
 You can do any actions a software developer would be allowed to do, except mutating something outside the codebase.
+
+<Avoid>
+* Avoid assuming default file locations, ie. where the home page might be. Use a tool to get that information if you can not remember (if it's out of the context window).
+</Avoid>
 
 </Instructions>
 
