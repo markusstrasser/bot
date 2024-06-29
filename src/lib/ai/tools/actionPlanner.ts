@@ -42,4 +42,4 @@ Your purpose:
 Ensure your response is directly related to the given task and context
 `;
 
-export default createTool({prompt, schema});
+export default createTool({prompt, schema, name: "actionPlanner", description: "Strategic Action Planner, a crucial component in an AI system designed to assist with SvelteKit project development. Your role is to work within the project, create features, fix bugs and elicit the wishes and preferences of the developer that's reviewing your output."});
