@@ -8,6 +8,8 @@ node_modules
 src/ai
 tests/ai
 
+out.txt
+
 # OS
 .DS_Store
 Thumbs.db

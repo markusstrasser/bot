@@ -8,25 +8,6 @@ const openai = createOpenAI({
 	apiKey: env.OPENAI_API_KEY ?? ''
 });
 
-const botChain = async (messages: []) => {
-	const { prompt, zodSchema: schema, prefill } = actionPlanner;
-	//generateObj action plan from messages
-	const { object }: {object: z.infer<typeof schema>} = await generateObject({
-		model: openai('gpt-4'),
-		system: prompt,
-		messages: [{ role: 'user', content: 'TODO: if new convo: context of project' }],
-		schema
-	});
-
-  console.log(object.overallStrategy, "strategy")
-  
-
-
-
-  
-
-};
-
 export const POST = async ({ request }) => {
 	const { messages } = await request.json();
 
@@ -48,4 +29,3 @@ export const POST = async ({ request }) => {
 	return result.toAIStreamResponse();
 };
 
-import { generateText } from 'ai';

@@ -44,6 +44,7 @@
 		"ai": "^3.2.15",
 		"dotenv": "^16.4.5",
 		"eslint-plugin-neverthrow": "^1.1.4",
+		"find-up": "^7.0.0",
 		"ignore": "^5.3.1",
 		"memfs": "^4.9.3",
 		"neverthrow": "^6.2.2",
