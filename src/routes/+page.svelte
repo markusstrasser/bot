@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { generateComponent } from '$lib/ai';
+	import { generateComponent } from '$lib/ai/ai';
 	import { goto } from '$app/navigation';
 	import { logError } from '$lib/logger';
 

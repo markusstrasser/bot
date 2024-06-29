@@ -1,10 +1,12 @@
 node_modules
-
+./pnpm-lock.yaml
 # Output
 .output
 .vercel
 /.svelte-kit
 /build
+src/ai
+tests/ai
 
 # OS
 .DS_Store

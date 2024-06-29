@@ -27,7 +27,8 @@
 		{#if error}
 			<p class="text-red-500">Error: {error}</p>
 		{:else}
-			<div data-testid="generated-component">
+			<div data-testid="generated-co
+			mponent">
 				{@html data.usageExample}
 			</div>
 		{/if}
