@@ -1,17 +1,20 @@
-
 // src/lib/action-planner.ts
-import { z } from "zod";
-import createTool from "./createTool";
-
+import { z } from 'zod';
+import createTool from './createTool';
 
 const schema = z.object({
-  actions: z.array(z.object({
-    description: z.string().describe("A high-level description of the action"),
-    reasoning: z.string().describe("The reasoning behind choosing this action"),
-    expectedOutcome: z.string().describe("The expected outcome or result of this action")
-  })).min(1).max(7)
-    .describe("A list of high-level actions to accomplish the task"),
-  overallStrategy: z.string().describe("A brief explanation of the overall strategy")
+	actions: z
+		.array(
+			z.object({
+				description: z.string().describe('A high-level description of the action'),
+				reasoning: z.string().describe('The reasoning behind choosing this action'),
+				expectedOutcome: z.string().describe('The expected outcome or result of this action')
+			})
+		)
+		.min(1)
+		.max(7)
+		.describe('A list of high-level actions to accomplish the task'),
+	overallStrategy: z.string().describe('A brief explanation of the overall strategy')
 });
 
 const prompt = `
@@ -46,4 +49,10 @@ Your purpose:
 Ensure your response is directly related to the given task and context
 `;
 
-export default createTool({prompt, schema, name: "actionPlanner", description: "Strategic Action Planner, a crucial component in an AI system designed to assist with SvelteKit project development. Your role is to work within the project, create features, fix bugs and elicit the wishes and preferences of the developer that's reviewing your output."});
+export default createTool({
+	prompt,
+	schema,
+	name: 'actionPlanner',
+	description:
+		"Strategic Action Planner, a crucial component in an AI system designed to assist with SvelteKit project development. Your role is to work within the project, create features, fix bugs and elicit the wishes and preferences of the developer that's reviewing your output."
+});

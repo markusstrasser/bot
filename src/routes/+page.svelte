@@ -1,65 +1,51 @@
+<!-- src/routes/+page.svelte -->
 <script lang="ts">
-	import { generateComponent } from '$lib/ai/ai';
-	import { goto } from '$app/navigation';
-	import { logError } from '$lib/logger';
+import { useChat } from '@ai-sdk/svelte';
+import { useQuery, useConvexClient } from 'convex-svelte';
+import { api } from '../convex/_generated/api.js';
+import { onMount } from 'svelte';
 
-	let prompt = '';
-	let isLoading = false;
-	let error: string | null = null;
+const events = useQuery(api.events.list, {});
+const client = useConvexClient();
 
-	function sanitizePrompt(input: string): string {
-		return input.trim().replace(/[<>]/g, '');
-	}
+const chatConfig = {
+  api: '/api/chat',
+  // onFinish: (message) => {
+  //   try {
+  //     client.mutation(api.events.add, { 
+  //       type: 'CHAT_COMPLETION', 
+  //       payload: JSON.parse(message.content) 
+  //     });
+  //   } catch (error) {
+  //     console.error('Failed to parse message content:', error);
+  //   }
+  // }
+};
 
-	async function handleSubmit() {
-		isLoading = true;
-		error = null;
-		const sanitizedPrompt = sanitizePrompt(prompt);
-		if (sanitizedPrompt.length < 5) {
-			error = 'Prompt must be at least 5 characters long';
-			isLoading = false;
-			return;
-		}
-		try {
-			const generatedComponent = await generateComponent(sanitizedPrompt);
-			const params = new URLSearchParams({
-				code: encodeURIComponent(generatedComponent.code),
-				usageExample: encodeURIComponent(generatedComponent.usageExample)
-			});
-			goto(`/preview?${params.toString()}`);
-		} catch (e) {
-			error = e instanceof Error ? e.message : String(e);
-			logError(e as Error, { page: 'home', action: 'generate component' });
-		} finally {
-			isLoading = false;
-		}
-	}
+const { messages, input, handleSubmit, isLoading } = useChat(chatConfig);
+
+onMount(() => {
+  if (!$messages || $messages.length === 0) {
+    console.warn('No messages available');
+  }
+});
 </script>
 
-<div class="max-w-2xl mx-auto p-6">
-	<h1 class="text-3xl font-bold mb-6 text-center">AI Component Generator</h1>
-
-	<form on:submit|preventDefault={handleSubmit} class="mb-6">
-		<input
-			bind:value={prompt}
-			placeholder="Describe your component..."
-			class="w-full p-2 border border-gray-300 rounded mb-4"
-			aria-label="Component description"
-			aria-required="true"
-		/>
-		<button
-			type="submit"
-			disabled={isLoading}
-			class="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded disabled:opacity-50"
-			aria-busy={isLoading}
-		>
-			{isLoading ? 'Generating...' : 'Generate'}
-		</button>
-	</form>
-
-	{#if isLoading}
-		<p class="text-center text-gray-600">Generating component...</p>
-	{:else if error}
-		<p class="text-center text-red-500">{error}</p>
-	{/if}
+<div class="container mx-auto p-4">
+  <div class="bg-white p-4 rounded shadow">
+    <h2 class="text-lg font-bold mb-2">Chatbot</h2>
+    {#if $messages && $messages.length > 0}
+      <ul>
+        {#each $messages as message}
+          <li>{message.role}: {message.content}</li>
+        {/each}
+      </ul>
+    {:else}
+      <p>No messages yet.</p>
+    {/if}
+    <form on:submit|preventDefault={handleSubmit}>
+      <input bind:value={$input} disabled={$isLoading} />
+      <button type="submit" disabled={$isLoading}>Send</button>
+    </form>
+  </div>
 </div>
