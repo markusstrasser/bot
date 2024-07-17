@@ -40,7 +40,11 @@
 			<ul>
 				{#each $messages as message}
 					<li>{message.role}</li>
-					{@html `<${message.content}`}
+					{#if message.role === 'user'}
+						<li>{message.content}</li>
+					{:else}
+						{@html `<${message.content}`}
+					{/if}
 				{/each}
 			</ul>
 		{:else}
