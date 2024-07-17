@@ -10,8 +10,7 @@ import { anthropic } from './providers';
 export const agent = async (messages: CoreMessage[]) => {
 	const { text: answer } = await generateText({
 		model: anthropic('claude-3-5-sonnet-20240620'),
-		system: `You are a code bot with many tools to answer the users question about the project they are working on. Respond ONLY in JSON
-		`,
+		system: `You are a code bot with many tools to answer the users question about the project they are working on. Respond ONLY in JSON`,
 		messages,
 		tools: {
 			calculate: tool({
